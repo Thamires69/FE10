@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto Cookies — 3 bugs corrigidos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 32px 20px 64px;
+    }
+
+    .pagina {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #1e1b4b;
+      margin: 0 0 8px;
+    }
+
+    .aviso {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      color: #78350f;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .aviso code {
+      background: #fde68a;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .grade {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+
+    /* Componentes */
+    .demo-ler,
+    .demo-apagar,
+    .demo-gravar {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 480px;
+      flex: 1 1 320px;
+    }
+
+    .demo-ler h3,
+    .demo-apagar h3,
+    .demo-gravar h3 {
+      font-size: 1rem;
+      margin: 0 0 10px;
+      color: #1e1b4b;
+    }
+
+    .demo-ler p {
+      font-size: 0.86rem;
+      color: #64748b;
+      margin: 0 0 14px;
+    }
+
+    .demo-apagar label,
+    .demo-gravar label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+
+    .demo-apagar input,
+    .demo-gravar input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .demo-ler button,
+    .demo-apagar button,
+    .demo-gravar button {
+      background: #7c3aed;
+      color: #ffffff;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .demo-apagar button,
+    .demo-gravar button {
+      font-size: 0.82rem;
+      padding: 9px 16px;
+    }
+
+    .demo-ler button:hover,
+    .demo-apagar button:hover,
+    .demo-gravar button:hover {
+      background: #6d28d9;
+    }
+
+    .btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .terminal {
+      background: #0b0518;
+      color: #a5f3fc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: "Courier New", monospace;
+      font-size: 0.78rem;
+      min-height: 40px;
+      word-break: break-all;
+    }
+
+    /* Tabela de cookies simulada */
+    .tabela-cookies {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .tabela-cookies h2 {
+      font-size: 1.05rem;
+      color: #1e1b4b;
+      margin: 0 0 8px;
+    }
+
+    .tabela-cookies .nota {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin: 0 0 14px;
+    }
+
+    .tabela-cookies table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .tabela-cookies th,
+    .tabela-cookies td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      word-break: break-all;
+    }
+
+    .tabela-cookies th {
+      color: #475569;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tabela-cookies td.vazio {
+      color: #94a3b8;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="pagina">
+    <h1>🍪 Projeto Cookies — 3 bugs corrigidos</h1>
+
+    <div class="aviso">
+      <strong>⚠️ Abra pelo Live Server, não pelo duplo clique.</strong>
+      Cookies são bloqueados quando o arquivo é aberto via <code>file://</code>.
+      No VSCode: clique com o botão direito no arquivo → <em>Open with Live Server</em>.
+    </div>
+
+    <div class="grade">
+      <!-- 1. Ler cookies -->
+      <div class="demo-ler">
+        <h3>Ler cookies</h3>
+        <p>Este componente deveria mostrar os cookies atuais.</p>
+        <button onclick="lerCookies()">Ler cookies agora</button>
+        <div class="terminal" id="demo-ler">// Clique para ler</div>
+      </div>
+
+      <!-- 2. Apagar tema -->
+      <div class="demo-apagar">
+        <h3>Apagar tema</h3>
+        <label for="demo-tema-apagar">Valor do tema (demonstração)</label>
+        <input type="text" id="demo-tema-apagar" value="escuro" />
+        <div class="btns">
+          <button onclick="gravarTemaParaApagar()">Gravar tema</button>
+          <button onclick="apagarTema()">Apagar tema</button>
+        </div>
+        <div class="terminal" id="demo-tema-resultado">// Grave e depois apague para testar</div>
+      </div>
+
+      <!-- 3. Gravar tema -->
+      <div class="demo-gravar">
+        <h3>Gravar tema</h3>
+        <label for="tema">Valor do tema</label>
+        <input type="text" id="tema" value="escuro" />
+        <button onclick="gravarTema()">Gravar tema</button>
+        <div class="terminal" id="demo-gravar-resultado">// Clique em "Gravar tema"</div>
+      </div>
+    </div>
+
+    <!-- Tabela de cookies simulada -->
+    <div class="tabela-cookies">
+      <h2>🔍 Tabela de cookies (simulação)</h2>
+      <p class="nota">
+        ⚠️ <strong>Tabela simulada.</strong> Os cookies reais ficam no DevTools
+        (F12 → Application → Storage → Cookies). Aqui mostramos o que
+        <code>document.cookie</code> consegue ler.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Path</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-cookies-corpo">
+          <tr>
+            <td colspan="3" class="vazio">Nenhum cookie gravado</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function lerCookies() {
+      var atual = document.cookie;
+      document.getElementById("demo-ler").innerHTML = atual
+        ? "Cookies: " + atual
+        : "(nenhum cookie)";
+      atualizarTabela();
+    }
+
+    function gravarTema() {
+      var valor = document.getElementById("tema").value;
+      document.cookie = "tema=" + encodeURIComponent(valor) + "; max-age=3600; path=/";
+      document.getElementById("demo-gravar-resultado").innerHTML =
+        "Cookie tema=" + valor + " gravado";
+      atualizarTabela();
+    }
+
+    function gravarTemaParaApagar() {
+      var valor = document.getElementById("demo-tema-apagar").value;
+      document.cookie = "tema=" + encodeURIComponent(valor) + "; max-age=3600; path=/";
+      document.getElementById("demo-tema-resultado").innerHTML =
+        "Cookie tema=" + valor + " gravado";
+      atualizarTabela();
+    }
+
+    function apagarTema() {
+      document.cookie = "tema=; max-age=0; path=/; SameSite=Lax";
+      document.getElementById("demo-tema-resultado").innerHTML =
+        "Cookie tema apagado";
+      atualizarTabela();
+    }
+
+    function atualizarTabela() {
+      var corpo = document.getElementById("tabela-cookies-corpo");
+      var cookies = document.cookie ? document.cookie.split(";") : [];
+      var linhas = [];
+
+      for (var i = 0; i < cookies.length; i++) {
+        var par = cookies[i].trim();
+        if (!par) {
+          continue;
+        }
+        var separador = par.indexOf("=");
+        var nome = separador > -1 ? par.slice(0, separador) : par;
+        var valor = separador > -1 ? par.slice(separador + 1) : "";
+        try {
+          valor = decodeURIComponent(valor);
+        } catch (e) {
+          /* mantém o valor bruto se não for decodificável */
+        }
+        linhas.push(
+          "<tr><td>" + escaparHtml(nome) + "</td><td>" +
+          escaparHtml(valor) + "</td><td>/</td></tr>"
+        );
+      }
+
+      corpo.innerHTML = linhas.length
+        ? linhas.join("")
+        : '<tr><td colspan="3" class="vazio">Nenhum cookie gravado</td></tr>';
+    }
+
+    function escaparHtml(texto) {
+      return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    atualizarTabela();
+  </script>
+</body>
+</html>
